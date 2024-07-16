@@ -24,7 +24,14 @@ app.use('/api/auth', authRouter);
 
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
-  const message = error.message || 'Internal Server Error';
+  let message = error.message || 'Internal Server Error';
+
+  if(error.code === 11000) {
+    const field = Object.keys(error.keyValue)[0];
+    const value = error.keyValue[field];
+    message = `${field.charAt(0).toUpperCase() + field.slice(1)} "${value}" already exists`;
+  }
+  
   res.status(statusCode).json({
     success: false,
     statusCode,
