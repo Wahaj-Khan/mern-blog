@@ -85,7 +85,7 @@ const SignIn = () => {
           </form>
           <div className="flex mt-4 text-sm gap-1">
             <span>Don&apos;t have an account?</span>
-            <Link to="/sign-in" className="text-purple-500 font-bold">Sign up</Link>
+            <Link to="/sign-up" className="text-purple-500 font-bold">Sign up</Link>
           </div>
           {
             errorMessage && <Alert color="failure" className="mt-5" >
