@@ -1,13 +1,26 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react"
-import { Link, useLocation } from "react-router-dom"
+import { Button, Dropdown, Navbar, TextInput } from "flowbite-react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AiOutlineSearch } from "react-icons/ai"
-import { FaMoon } from "react-icons/fa"
+import { FaMoon, FaSun } from "react-icons/fa"
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { toggleTheme } from "../redux/theme/themeSlice";
+import { signOut } from "../redux/user/userSlice";
 
 const Header = () => {
-    const { currentUser } = useSelector(state => state.user)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const path = useLocation().pathname
+    const { currentUser } = useSelector(state => state.user)
+    const { theme } = useSelector(state => state.theme)
+
+    const signOutHandler = (e) => {
+        e.preventDefault();
+        dispatch(signOut());
+        navigate('/sign-in', { replace: true });
+    }
+
     return (
         <Navbar className="border-b-2 p-4 w-full">
             <Link to="/" className="ml-6 self-center whitespace-nowrap text-sm sm:text-lg font-semibold dark:text-white">
@@ -27,8 +40,8 @@ const Header = () => {
                 <AiOutlineSearch />
             </Button>
             <div className="flex mr-6 gap-4 md:order-2">
-                <Button className="w-14 h-12 items-center hidden sm:inline" color='gray' pill>
-                    <FaMoon size={16} />
+                <Button className="w-14 h-12 hidden sm:inline" color='gray' pill onClick={() => { dispatch(toggleTheme()) }}>
+                    {theme === 'dark' ? <FaSun size={16} className="ml-[1px]" /> : <FaMoon size={16} className="ml-[1px]" />}
                 </Button>
 
                 {currentUser ? (
@@ -36,29 +49,31 @@ const Header = () => {
                         arrowIcon={false}
                         inline
                         label={
-                            <Avatar
-                                size='md'
-                                rounded
-                                alt="user"
-                                img={currentUser.profilePicture}
-                            />
+                            <div className="w-10 h-10 rounded-full overflow-hidden">
+                                <img
+                                    src={currentUser.profilePicture}
+                                    alt="user"
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
                         }
                     >
                         <Link to={'/dashboard?tab=profile'}>
                             <Dropdown.Item className="flex items-center font-bold text-base">
-                                <Avatar
-                                    size='sm'
-                                    rounded
-                                    alt="user"
-                                    img={currentUser.profilePicture}
-                                />
+                                <div className="w-8 h-8 rounded-full overflow-hidden">
+                                    <img
+                                        src={currentUser.profilePicture}
+                                        alt="user"
+                                        className="object-cover w-full h-full"
+                                    />
+                                </div>
                                 <span className="ml-2">{currentUser.username}</span>
                             </Dropdown.Item>
                         </Link>
                         <Dropdown.Divider />
-                        <Link to="#">
+                        <Link onClick={signOutHandler}>
                             <Dropdown.Item className="font-medium text-base">
-                                <FaArrowRightFromBracket className="mr-4 w-5 h-5"/>
+                                <FaArrowRightFromBracket className="mr-4 w-5 h-5" />
                                 Sign out
                             </Dropdown.Item>
                         </Link>

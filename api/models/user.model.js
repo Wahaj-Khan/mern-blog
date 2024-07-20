@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePicture: {
         type: String,
-        default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fprofile_3135715&psig=AOvVaw0qZhR_taSogi8cpWVL65V_&ust=1721445331585000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKji9t6RsocDFQAAAAAdAAAAABAW"
+        default: "https://e7.pngegg.com/pngimages/348/800/png-clipart-man-wearing-blue-shirt-illustration-computer-icons-avatar-user-login-avatar-blue-child.png"
     },
 }, { timestamps: true }
 );
