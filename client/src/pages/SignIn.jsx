@@ -1,57 +1,81 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react"
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { Toaster, toast } from 'sonner';
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   let timeoutId = null;
 
+    useEffect(() => {
+      if (error === "Please fill in all fields") {
+        toast.error(error);
+      }
+    },);
+  
   const handleChange = (e) => {
     clearTimeout(timeoutId);
 
     timeoutId = setTimeout(() => {
       setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-    }, 500);
+    }, 1000);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure("Please fill in all fields"));
     }
+    dispatch(signInStart());
 
-    try {
-      dispatch(signInStart());
+    const signInPromise = new Promise(async (resolve, reject) => {
+      try {
+        const res = await fetch("/api/auth/signin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+        const data = await res.json();
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        return dispatch(signInFailure(data.message || "An error occurred. Please try again."));
+        if (!res.ok) {
+          reject(data.message || "An error occurred. Please try again.");
+        } else {
+          dispatch(signInSuccess(data));
+          resolve(data);
+        }
+      } catch (error) {
+        dispatch(signInFailure(error.message || "An error occurred. Please try again."));
+        reject(error.message || "An error occurred. Please try again.");
       }
+    });
 
-      dispatch(signInSuccess(data));
-      navigate("/");
-
-    } catch (error) {
-      dispatch(signInFailure(error.message || "An error occurred. Please try again."));
-    } 
-  }
+    toast.promise(signInPromise, {
+      loading: 'Signing in...',
+      success: () => {
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+        return 'Signed in successfully!';
+      },
+      error: (err) => {
+        dispatch(signInFailure(err));
+        return `Error: ${err}`;
+      }
+    });
+  };
 
   return (
-    <div className="min-h-screen mt-20 font-medium">
+    <div className="min-h-screen mt-20 font-medium relative">
+
       <div className="flex flex-col md:flex-row max-w-3xl p-3 gap-5 mx-auto md:items-center">
         <div className="flex-1">
           <Link to="/" className="text-4xl font-bold dark:text-white">
@@ -82,21 +106,17 @@ const SignIn = () => {
                 </>
                 : "Sign in"}
             </Button>
-            <OAuth/>
+            <OAuth />
           </form>
           <div className="flex mt-4 text-sm gap-1">
             <span>Don&apos;t have an account?</span>
-            <Link to="/sign-up" className="text-purple-500 font-bold">Sign up</Link>
+            <Link to="/sign-up" className="text-purple-400 font-bold">Sign up</Link>
           </div>
-          {
-            errorMessage && <Alert color="failure" className="mt-5" >
-              {errorMessage}
-            </Alert>
-          }
         </div>
       </div>
+      <Toaster richColors />
     </div>
-  )
+  );
 }
 
-export default SignIn
+export default SignIn;

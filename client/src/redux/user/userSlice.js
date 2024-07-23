@@ -24,7 +24,9 @@ export const userSlice = createSlice({
             state.error = action.payload;   
         },
         signOut: (state) => {
+            state.loading = false;
             state.currentUser = null;
+            state.error = null;
         },
     },
 });

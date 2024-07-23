@@ -1,11 +1,10 @@
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AiOutlineSearch } from "react-icons/ai"
-import { FaMoon, FaSun } from "react-icons/fa"
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux"
-import { toggleTheme } from "../redux/theme/themeSlice";
 import { signOut } from "../redux/user/userSlice";
+import ThemeButton from "./Button/ThemeButton";
 
 const Header = () => {
 
@@ -13,12 +12,11 @@ const Header = () => {
     const navigate = useNavigate()
     const path = useLocation().pathname
     const { currentUser } = useSelector(state => state.user)
-    const { theme } = useSelector(state => state.theme)
 
     const signOutHandler = (e) => {
         e.preventDefault();
         dispatch(signOut());
-        navigate('/sign-in', { replace: true });
+        navigate('/sign-in');
     }
 
     return (
@@ -40,10 +38,7 @@ const Header = () => {
                 <AiOutlineSearch />
             </Button>
             <div className="flex mr-6 gap-4 md:order-2">
-                <Button className="w-14 h-12 hidden sm:inline" color='gray' pill onClick={() => { dispatch(toggleTheme()) }}>
-                    {theme === 'dark' ? <FaSun size={16} className="ml-[1px]" /> : <FaMoon size={16} className="ml-[1px]" />}
-                </Button>
-
+                <ThemeButton />
                 {currentUser ? (
                     <Dropdown
                         arrowIcon={false}
