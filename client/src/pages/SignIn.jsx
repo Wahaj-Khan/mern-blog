@@ -1,10 +1,10 @@
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Toaster, toast } from 'sonner';
 import { useEffect, useState } from "react";
+import OAuth from "../components/Button/OAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
-import OAuth from "../components/OAuth";
-import { Toaster, toast } from 'sonner';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const SignIn = () => {
 
     timeoutId = setTimeout(() => {
       setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-    }, 1000);
+    }, 500);
   };
 
   const handleSubmit = async (e) => {

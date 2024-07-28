@@ -1,11 +1,11 @@
+import { app } from '../../firebase';
 import { Button } from 'flowbite-react';
-import { FaGoogle } from "react-icons/fa";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { app } from '../firebase';
-import { useDispatch } from 'react-redux';
-import { signInSuccess } from '../redux/user/userSlice';
-import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
+import { FaGoogle } from "react-icons/fa";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { signInSuccess } from '../../redux/user/userSlice';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const OAuth = () => {
     const dispatch = useDispatch();

@@ -1,10 +1,10 @@
-import { Button, Dropdown, Navbar, TextInput } from "flowbite-react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { AiOutlineSearch } from "react-icons/ai"
-import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { useSelector, useDispatch } from "react-redux"
-import { signOut } from "../redux/user/userSlice";
 import ThemeButton from "./Button/ThemeButton";
+import { AiOutlineSearch } from "react-icons/ai";
+import { signOut } from "../redux/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 
 const Header = () => {
 

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Sidebar, SidebarItemGroup, SidebarItems } from "flowbite-react"
-import { BiSolidUser } from "react-icons/bi";
-import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { signOut } from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { BiSolidUser } from "react-icons/bi";
+import { signOut } from "../../redux/user/userSlice";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Sidebar, SidebarItemGroup, SidebarItems } from "flowbite-react";
 
 const DashSidebar = () => {
     const location = useLocation()
@@ -30,7 +30,7 @@ const DashSidebar = () => {
             <SidebarItems>
                 <SidebarItemGroup>
                     <Link to="/dashboard?tab=profile">
-                        <Sidebar.Item active={tab === 'profile'} icon={BiSolidUser} label={'User'} labelColor={'green'} >
+                        <Sidebar.Item active={tab === 'profile'} icon={BiSolidUser} label={'User'} labelColor={'green'} as='div' >
                             Profile
                         </Sidebar.Item>
                     </Link>
